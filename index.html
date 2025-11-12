@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Artisan bakery offering fresh breads, pastries, and cakes daily">
+    <title>La Petite Boulangerie - Artisan Bakery</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#8B4513',
+                            light: '#FFF7ED',
+                            accent: '#D2B48C',
+                            dark: '#5C2E0A'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Playfair Display', 'serif'],
+                        body: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Typography */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Fade-in Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Slider Transitions */
+        .slide {
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Mobile Menu Slide Animation */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Dark Mode Transitions */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Card Hover Effect */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark mode card hover */
+        .dark .product-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Header Scroll Effect */
+        .header-scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .header-scrolled {
+            background-color: rgba(17, 24, 39, 0.95);
+        }
+    </style>
+</head>
+
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-body">
+
+    <!-- Header / Navigation -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white dark:bg-gray-900">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+
+                <!-- Logo -->
+                <a href="#home" class="text-2xl md:text-3xl font-display font-bold text-brand-primary dark:text-brand-accent">
+                    La Petite Boulangerie
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent font-medium transition-colors">Home</a>
+                    <a href="#menu" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent font-medium transition-colors">Menu</a>
+                    <a href="#about" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent font-medium transition-colors">About</a>
+                    <a href="#contact" class="nav-link text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent font-medium transition-colors">Contact</a>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" aria-label="Toggle dark mode" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <svg id="sunIcon" class="w-5 h-5 text-yellow-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg id="moonIcon" class="w-5 h-5 text-gray-700 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button & Dark Mode Toggle -->
+                <div class="flex md:hidden items-center space-x-3">
+                    <!-- Mobile Dark Mode Toggle -->
+                    <button id="darkModeToggleMobile" aria-label="Toggle dark mode" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <svg class="w-5 h-5 text-yellow-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg class="w-5 h-5 text-gray-700 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+
+                    <button id="mobileMenuToggle" aria-label="Toggle mobile menu" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu (Slide-in from right) -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-white dark:bg-gray-900 shadow-2xl z-50 md:hidden">
+            <div class="flex flex-col h-full">
+                <!-- Mobile Menu Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                    <span class="text-xl font-display font-bold text-brand-primary dark:text-brand-accent">Menu</span>
+                    <button id="mobileMenuClose" aria-label="Close mobile menu" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Links -->
+                <nav class="flex flex-col p-6 space-y-6">
+                    <a href="#home" class="mobile-nav-link text-xl font-medium text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent transition-colors">Home</a>
+                    <a href="#menu" class="mobile-nav-link text-xl font-medium text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent transition-colors">Menu</a>
+                    <a href="#about" class="mobile-nav-link text-xl font-medium text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent transition-colors">About</a>
+                    <a href="#contact" class="mobile-nav-link text-xl font-medium text-gray-700 dark:text-gray-300 hover:text-brand-primary dark:hover:text-brand-accent transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Home Section / Hero Slider -->
+        <section id="home" class="pt-20">
+            <div class="relative h-[600px] md:h-[700px] overflow-hidden">
+
+                <!-- Slide 1 -->
+                <div class="slide absolute inset-0 opacity-100" data-slide="0">
+                    <img src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Fresh artisan bread" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center text-white px-4">
+                            <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-bold mb-4">Freshly Baked Daily</h1>
+                            <p class="text-lg md:text-xl lg:text-2xl mb-8 font-light">Artisan breads crafted with love and tradition</p>
+                            <a href="#menu" class="inline-block bg-brand-primary hover:bg-brand-dark text-white font-semibold px-8 py-3 rounded-full transition-colors">View Menu</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide absolute inset-0 opacity-0" data-slide="1">
+                    <img src="https://images.pexels.com/photos/1055270/pexels-photo-1055270.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Delicious pastries" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center text-white px-4">
+                            <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-bold mb-4">Handcrafted Pastries</h1>
+                            <p class="text-lg md:text-xl lg:text-2xl mb-8 font-light">Sweet moments made from the finest ingredients</p>
+                            <a href="#menu" class="inline-block bg-brand-primary hover:bg-brand-dark text-white font-semibold px-8 py-3 rounded-full transition-colors">View Menu</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide absolute inset-0 opacity-0" data-slide="2">
+                    <img src="https://images.pexels.com/photos/1070850/pexels-photo-1070850.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Beautiful cakes" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-center text-white px-4">
+                            <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-bold mb-4">Celebration Cakes</h1>
+                            <p class="text-lg md:text-xl lg:text-2xl mb-8 font-light">Making your special moments unforgettable</p>
+                            <a href="#menu" class="inline-block bg-brand-primary hover:bg-brand-dark text-white font-semibold px-8 py-3 rounded-full transition-colors">View Menu</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slider Controls -->
+                <button id="prevSlide" aria-label="Previous slide" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 transition-all z-10">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+
+                <button id="nextSlide" aria-label="Next slide" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 transition-all z-10">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+
+                <!-- Slider Dots -->
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
+                    <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-75 transition-opacity" data-slide="0" aria-label="Go to slide 1"></button>
+                    <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-75 transition-opacity" data-slide="1" aria-label="Go to slide 2"></button>
+                    <button class="slider-dot w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-75 transition-opacity" data-slide="2" aria-label="Go to slide 3"></button>
+                </div>
+            </div>
+
+            <!-- Featured Products Section -->
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gray-800 dark:text-white mb-4">Fresh From The Oven</h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Discover our latest creations and customer favorites</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Featured Product 1 -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg fade-in">
+                        <img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Sourdough Bread" class="w-full h-64 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Sourdough Bread</h3>
+                            <p class="text-brand-primary dark:text-brand-accent font-semibold text-xl mb-3">$6.50</p>
+                            <p class="text-gray-600 dark:text-gray-400">Traditional sourdough with a crispy crust and soft, tangy interior. Fermented for 24 hours.</p>
+                        </div>
+                    </div>
+
+                    <!-- Featured Product 2 -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg fade-in">
+                        <img src="https://images.pexels.com/photos/2067421/pexels-photo-2067421.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Chocolate Croissant" class="w-full h-64 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Chocolate Croissant</h3>
+                            <p class="text-brand-primary dark:text-brand-accent font-semibold text-xl mb-3">$4.25</p>
+                            <p class="text-gray-600 dark:text-gray-400">Buttery, flaky pastry filled with rich Belgian chocolate. A perfect morning indulgence.</p>
+                        </div>
+                    </div>
+
+                    <!-- Featured Product 3 -->
+                    <div class="product-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg fade-in">
+                        <img src="https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Vanilla Berry Cake" class="w-full h-64 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Vanilla Berry Cake</h3>
+                            <p class="text-brand-primary dark:text-brand-accent font-semibold text-xl mb-3">$28.00</p>
+                            <p class="text-gray-600 dark:text-gray-400">Moist vanilla sponge layered with fresh berries and cream. Perfect for celebrations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="bg-brand-light dark:bg-gray-800 py-16 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gray-800 dark:text-white mb-4">Our Menu</h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Explore our full collection of artisan baked goods</p>
+                </div>
+
+                <!-- Breads Category -->
+                <div class="mb-16 fade-in">
+                    <h3 class="text-2xl md:text-3xl font-display font-semibold text-gray-800 dark:text-white mb-8 text-center">Breads</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Baguette" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Baguette</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$4.50</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Classic French bread with a golden, crackling crust</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1586947/pexels-photo-1586947.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Multigrain Loaf" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Multigrain Loaf</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$7.00</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Wholesome blend of oats, seeds, and whole wheat</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/209403/pexels-photo-209403.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Ciabatta" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Ciabatta</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$5.75</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Italian classic with an airy crumb and rustic appeal</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1775039/pexels-photo-1775039.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Rye Bread" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Rye Bread</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$6.25</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Dense and flavorful with a distinctive earthy taste</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pastries Category -->
+                <div class="mb-16 fade-in">
+                    <h3 class="text-2xl md:text-3xl font-display font-semibold text-gray-800 dark:text-white mb-8 text-center">Pastries</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1775039/pexels-photo-1775039.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Plain Croissant" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Plain Croissant</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$3.50</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Buttery perfection with 27 delicate layers</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1775035/pexels-photo-1775035.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Almond Danish" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Almond Danish</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$4.75</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Sweet almond cream on flaky pastry dough</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/3892469/pexels-photo-3892469.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Apple Turnover" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Apple Turnover</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$4.00</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Warm spiced apples wrapped in golden pastry</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Cinnamon Roll" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Cinnamon Roll</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$5.25</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Soft, gooey spirals with cream cheese frosting</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cakes Category -->
+                <div class="fade-in">
+                    <h3 class="text-2xl md:text-3xl font-display font-semibold text-gray-800 dark:text-white mb-8 text-center">Cakes</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/140831/pexels-photo-140831.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Chocolate Cake" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Chocolate Cake</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$32.00</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Rich chocolate layers with ganache frosting</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1395964/pexels-photo-1395964.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Red Velvet Cake" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Red Velvet Cake</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$35.00</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Classic red velvet with cream cheese frosting</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1721934/pexels-photo-1721934.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Lemon Drizzle Cake" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Lemon Drizzle Cake</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$26.00</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Light, zesty cake with sweet lemon glaze</p>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Carrot Cake" class="w-full h-48 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-xl font-display font-semibold mb-2 text-gray-800 dark:text-white">Carrot Cake</h4>
+                                <p class="text-brand-primary dark:text-brand-accent font-semibold text-lg mb-2">$30.00</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Moist cake with walnuts and cream cheese icing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-16 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+                    <!-- Image Column -->
+                    <div class="fade-in">
+                        <img src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Bakery interior" class="w-full h-[400px] md:h-[500px] object-cover rounded-lg shadow-xl">
+                    </div>
+
+                    <!-- Text Column -->
+                    <div class="fade-in">
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gray-800 dark:text-white mb-6">Our Story</h2>
+                        <div class="space-y-4 text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+                            <p>
+                                Founded in 2010, La Petite Boulangerie began as a passion project by two friends who shared a love for traditional French baking techniques and artisan craftsmanship.
+                            </p>
+                            <p>
+                                Every morning at 4 AM, our skilled bakers arrive to prepare the day's offerings using time-honored methods passed down through generations. We source only the finest organic flours, locally-sourced butter, and seasonal ingredients to ensure each bite is nothing short of extraordinary.
+                            </p>
+                            <p>
+                                Our commitment to quality means we never take shortcuts. From our 24-hour sourdough fermentation to our hand-laminated croissants, every product reflects our dedication to the craft of baking.
+                            </p>
+                            <p>
+                                Today, we're proud to serve our community with the same passion and attention to detail that inspired us from the very beginning. Thank you for being part of our journey.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="bg-brand-light dark:bg-gray-800 py-16 md:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gray-800 dark:text-white mb-4">Get In Touch</h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Have a question or special order? We'd love to hear from you.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+                    <!-- Contact Form Column -->
+                    <div class="fade-in">
+                        <div id="contactFormContainer" class="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-8">
+                            <form id="contactForm" class="space-y-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
+                                    <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-accent focus:border-transparent bg-white dark:bg-gray-800 text-gray-800 dark:text-white transition-all" required>
+                                    <p id="nameError" class="text-red-500 text-sm mt-1 hidden">Please enter your name</p>
+                                </div>
+
+                                <div>
+                                    <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                                    <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-accent focus:border-transparent bg-white dark:bg-gray-800 text-gray-800 dark:text-white transition-all" required>
+                                    <p id="emailError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email address</p>
+                                </div>
+
+                                <div>
+                                    <label for="message" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                                    <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-accent focus:border-transparent bg-white dark:bg-gray-800 text-gray-800 dark:text-white transition-all resize-none" required></textarea>
+                                    <p id="messageError" class="text-red-500 text-sm mt-1 hidden">Please enter a message</p>
+                                </div>
+
+                                <button type="submit" class="w-full bg-brand-primary hover:bg-brand-dark text-white font-semibold px-6 py-3 rounded-lg transition-colors">Send Message</button>
+                            </form>
+                        </div>
+
+                        <!-- Success Message (hidden by default) -->
+                        <div id="successMessage" class="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-8 hidden">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h3 class="text-2xl font-display font-bold text-gray-800 dark:text-white mb-2">Thank you for your message!</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-6">We'll get back to you as soon as possible.</p>
+                                <button id="sendAnother" class="bg-brand-primary hover:bg-brand-dark text-white font-semibold px-6 py-3 rounded-lg transition-colors">Send Another Message</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info Column -->
+                    <div class="fade-in space-y-8">
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-8">
+                            <h3 class="text-2xl font-display font-semibold text-gray-800 dark:text-white mb-6">Visit Us</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <svg class="w-6 h-6 text-brand-primary dark:text-brand-accent mt-1 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-semibold text-gray-800 dark:text-white">Address</p>
+                                        <p class="text-gray-600 dark:text-gray-400">123 Baker Street<br>Paris, France 75001</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <svg class="w-6 h-6 text-brand-primary dark:text-brand-accent mt-1 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-semibold text-gray-800 dark:text-white">Phone</p>
+                                        <p class="text-gray-600 dark:text-gray-400">+33 1 23 45 67 89</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-8">
+                            <h3 class="text-2xl font-display font-semibold text-gray-800 dark:text-white mb-6">Opening Hours</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Monday - Friday</span>
+                                    <span class="font-semibold text-gray-800 dark:text-white">7:00 AM - 7:00 PM</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Saturday</span>
+                                    <span class="font-semibold text-gray-800 dark:text-white">8:00 AM - 6:00 PM</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-400">Sunday</span>
+                                    <span class="font-semibold text-gray-800 dark:text-white">8:00 AM - 4:00 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-black text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-display font-bold mb-4">La Petite Boulangerie</h3>
+                <p class="text-gray-400 mb-6">Crafting memories, one loaf at a time.</p>
+                <p class="text-gray-500 text-sm">&copy; 2024 La Petite Boulangerie. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ==========================================
+        // DARK MODE FUNCTIONALITY
+        // ==========================================
+
+        /**
+         * Dark Mode Manager
+         * Handles toggling between light and dark themes
+         * Persists user preference in localStorage for future visits
+         */
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
+
+        // Check for saved user preference, otherwise default to light mode
+        // localStorage is a browser API that persists data even after closing the browser
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+        // Apply the saved theme on page load
+        if (currentTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+
+            // Save the user's preference to localStorage
+            const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        }
+
+        // Add event listeners to both desktop and mobile dark mode toggles
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        darkModeToggleMobile.addEventListener('click', toggleDarkMode);
+
+
+        // ==========================================
+        // MOBILE MENU FUNCTIONALITY
+        // ==========================================
+
+        /**
+         * Mobile Menu Manager
+         * Handles opening/closing the mobile navigation menu
+         * Automatically closes when a navigation link is clicked
+         */
+
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        // Open mobile menu
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+        });
+
+        // Close mobile menu
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+        });
+
+        // Close mobile menu when a navigation link is clicked
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+
+        // ==========================================
+        // HEADER SCROLL EFFECT
+        // ==========================================
+
+        /**
+         * Header Scroll Effect
+         * Adds a subtle background and shadow to the header when scrolling
+         * Creates a "floating" effect for better visual hierarchy
+         */
+
+        const header = document.getElementById('header');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+
+
+        // ==========================================
+        // HERO SLIDER FUNCTIONALITY
+        // ==========================================
+
+        /**
+         * Hero Slider Manager
+         * Auto-plays through 3 hero slides with a 5-second interval
+         * Users can manually navigate with prev/next buttons or dot indicators
+         */
+
+        const slides = document.querySelectorAll('.slide');
+        const sliderDots = document.querySelectorAll('.slider-dot');
+        const prevButton = document.getElementById('prevSlide');
+        const nextButton = document.getElementById('nextSlide');
+
+        let currentSlide = 0;
+        let slideInterval;
+
+        // Function to show a specific slide
+        function showSlide(index) {
+            // Hide all slides
+            slides.forEach(slide => {
+                slide.style.opacity = '0';
+            });
+
+            // Reset all dot indicators
+            sliderDots.forEach(dot => {
+                dot.classList.remove('opacity-100');
+                dot.classList.add('opacity-50');
+            });
+
+            // Show the selected slide
+            slides[index].style.opacity = '1';
+            sliderDots[index].classList.remove('opacity-50');
+            sliderDots[index].classList.add('opacity-100');
+
+            currentSlide = index;
+        }
+
+        // Function to go to next slide
+        function nextSlide() {
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }
+
+        // Function to go to previous slide
+        function prevSlide() {
+            let prev = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prev);
+        }
+
+        // Auto-play: Change slide every 5 seconds
+        function startSlideShow() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        // Stop auto-play (useful when user manually interacts)
+        function stopSlideShow() {
+            clearInterval(slideInterval);
+        }
+
+        // Event listeners for manual controls
+        nextButton.addEventListener('click', () => {
+            stopSlideShow();
+            nextSlide();
+            startSlideShow(); // Restart auto-play after manual interaction
+        });
+
+        prevButton.addEventListener('click', () => {
+            stopSlideShow();
+            prevSlide();
+            startSlideShow();
+        });
+
+        // Dot indicators - allow direct navigation to any slide
+        sliderDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                stopSlideShow();
+                showSlide(index);
+                startSlideShow();
+            });
+        });
+
+        // Initialize slider: show first slide and start auto-play
+        showSlide(0);
+        startSlideShow();
+
+
+        // ==========================================
+        // SCROLL ANIMATIONS (INTERSECTION OBSERVER)
+        // ==========================================
+
+        /**
+         * Scroll Animation Manager using Intersection Observer API
+         *
+         * The Intersection Observer API is a modern JavaScript feature that efficiently
+         * detects when elements enter or exit the viewport (visible screen area).
+         *
+         * This is much more performant than using scroll event listeners because:
+         * 1. It runs asynchronously (doesn't block the main thread)
+         * 2. It only triggers when elements actually intersect with the viewport
+         * 3. It automatically handles cleanup when elements are no longer observed
+         *
+         * We use it here to fade in sections as the user scrolls down the page.
+         */
+
+        // Configuration for the observer
+        const observerOptions = {
+            threshold: 0.1, // Trigger when 10% of the element is visible
+            rootMargin: '0px 0px -50px 0px' // Trigger slightly before the element enters viewport
+        };
+
+        // Callback function that runs when an observed element enters/exits viewport
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                // entry.isIntersecting is true when the element is visible
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: stop observing after animation to improve performance
+                    // observer.unobserve(entry.target);
+                }
+            });
+        };
+
+        // Create the Intersection Observer instance
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        // Find all elements with the 'fade-in' class and observe them
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+
+
+        // ==========================================
+        // CONTACT FORM FUNCTIONALITY
+        // ==========================================
+
+        /**
+         * Contact Form Manager
+         * Handles client-side validation and form submission
+         * Shows inline error messages (no annoying alert() popups!)
+         * Displays a success message after submission
+         */
+
+        const contactForm = document.getElementById('contactForm');
+        const contactFormContainer = document.getElementById('contactFormContainer');
+        const successMessage = document.getElementById('successMessage');
+        const sendAnotherButton = document.getElementById('sendAnother');
+
+        // Email validation regex pattern
+        // This pattern checks for a basic email format: text@text.text
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Function to validate a single field
+        function validateField(field, errorElement, validationFn) {
+            const value = field.value.trim();
+            const isValid = validationFn(value);
+
+            if (!isValid) {
+                errorElement.classList.remove('hidden');
+                field.classList.add('border-red-500');
+                return false;
+            } else {
+                errorElement.classList.add('hidden');
+                field.classList.remove('border-red-500');
+                return true;
+            }
+        }
+
+        // Form submission handler
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent default form submission (page reload)
+
+            // Get form fields and error message elements
+            const nameField = document.getElementById('name');
+            const emailField = document.getElementById('email');
+            const messageField = document.getElementById('message');
+
+            const nameError = document.getElementById('nameError');
+            const emailError = document.getElementById('emailError');
+            const messageError = document.getElementById('messageError');
+
+            // Validate each field
+            const isNameValid = validateField(
+                nameField,
+                nameError,
+                (value) => value.length > 0
+            );
+
+            const isEmailValid = validateField(
+                emailField,
+                emailError,
+                (value) => emailRegex.test(value)
+            );
+
+            const isMessageValid = validateField(
+                messageField,
+                messageError,
+                (value) => value.length > 0
+            );
+
+            // If all fields are valid, simulate form submission
+            if (isNameValid && isEmailValid && isMessageValid) {
+                // In a real application, you would send this data to a server here
+                // For this demo, we'll just show a success message
+
+                // Hide the form
+                contactFormContainer.classList.add('hidden');
+
+                // Show success message
+                successMessage.classList.remove('hidden');
+
+                // Reset the form for potential future submissions
+                contactForm.reset();
+            }
+        });
+
+        // "Send Another Message" button functionality
+        sendAnotherButton.addEventListener('click', () => {
+            successMessage.classList.add('hidden');
+            contactFormContainer.classList.remove('hidden');
+        });
+
+        // Real-time validation: clear error messages when user starts typing
+        const formInputs = contactForm.querySelectorAll('input, textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                const errorId = input.id + 'Error';
+                const errorElement = document.getElementById(errorId);
+                if (errorElement && !errorElement.classList.contains('hidden')) {
+                    errorElement.classList.add('hidden');
+                    input.classList.remove('border-red-500');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
